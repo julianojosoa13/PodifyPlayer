@@ -3,11 +3,7 @@ import React from 'react';
 import SignUp from '@views/auth/SignUp';
 
 const App = () => {
-  return (
-    <SafeAreaView>
-      <SignUp />
-    </SafeAreaView>
-  );
+  return <SignUp />;
 };
 
 export default App;

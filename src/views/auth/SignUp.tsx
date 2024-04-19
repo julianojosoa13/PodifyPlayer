@@ -12,6 +12,12 @@ const SignUp: FC<Props> = props => {
     password: '',
   });
 
+  const [errorInfo, setErrorInfo] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.formContainer}>
@@ -19,6 +25,7 @@ const SignUp: FC<Props> = props => {
           label="Name"
           placeholder="John Doe"
           containerStyle={styles.marginBottom}
+          errorMsg={errorInfo.name}
           onChange={text => setUserInfo({...userInfo, name: text})}
         />
         <AuthInputField
@@ -27,16 +34,53 @@ const SignUp: FC<Props> = props => {
           keyboardType="email-address"
           autoCapitalize="none"
           containerStyle={styles.marginBottom}
+          errorMsg={errorInfo.email}
           onChange={text => setUserInfo({...userInfo, email: text})}
         />
         <AuthInputField
           label="Password"
           placeholder="******"
           autoCapitalize="none"
+          errorMsg={errorInfo.password}
           secureTextEntry
           onChange={text => setUserInfo({...userInfo, password: text})}
         />
-        <Button title="Sign Up" onPress={() => console.log(userInfo)} />
+        <Button
+          title="Sign Up"
+          onPress={() => {
+            if (!userInfo.name) {
+              return setErrorInfo({
+                email: '',
+                password: '',
+                name: 'Name is missings',
+              });
+            }
+
+            if (!userInfo.email) {
+              return setErrorInfo({
+                password: '',
+                name: '',
+                email: 'Email is missings',
+              });
+            }
+
+            if (!userInfo.password) {
+              return setErrorInfo({
+                name: '',
+                email: '',
+                password: 'Password is missings',
+              });
+            }
+
+            setErrorInfo({
+              name: '',
+              email: '',
+              password: '',
+            });
+
+            console.log(userInfo);
+          }}
+        />
       </View>
     </SafeAreaView>
   );

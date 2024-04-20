@@ -1,11 +1,11 @@
 import {Formik, FormikHelpers} from 'formik';
-import React, {FC} from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import React, {ReactNode} from 'react';
 
 interface Props<T> {
   initialValues: any;
   validationSchema: T;
   onSubmit(values: T, formikHelpers: FormikHelpers<T>): void;
+  children: ReactNode;
 }
 
 const Form = <T extends object>(props: Props<T>) => {
@@ -13,12 +13,10 @@ const Form = <T extends object>(props: Props<T>) => {
     <Formik
       initialValues={props.initialValues}
       onSubmit={props.onSubmit}
-      validationSchema={props.validationSchema}></Formik>
+      validationSchema={props.validationSchema}>
+      {props.children}
+    </Formik>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default Form;

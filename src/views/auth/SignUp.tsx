@@ -1,9 +1,10 @@
-import AuthInputField from '@components/AuthInputField';
+import AuthInputField from 'src/form/AuthInputField';
 import colors from '@utils/colors';
-import {Formik} from 'formik';
 import React, {FC, useState} from 'react';
 import {View, StyleSheet, SafeAreaView, Button} from 'react-native';
+import Form from 'src/form';
 import * as yup from 'yup';
+import SubmitBtn from 'src/form/SubmitBtn';
 
 interface Props {}
 
@@ -37,49 +38,37 @@ const signupSchema = yup.object({
 });
 
 const SignUp: FC<Props> = props => {
-  const [userInfo, setUserInfo] = useState(initialValues);
-
   return (
     <SafeAreaView style={styles.container}>
-      <Formik
+      <Form
         initialValues={initialValues}
         onSubmit={values => console.log(values)}
         validationSchema={signupSchema}>
-        {({submitForm, values, handleChange, errors}) => {
-          return (
-            <View style={styles.formContainer}>
-              <AuthInputField
-                label="Name"
-                placeholder="John Doe"
-                containerStyle={styles.marginBottom}
-                onChange={handleChange('name')}
-                value={values.name}
-                errorMsg={errors.name}
-              />
-              <AuthInputField
-                label="Email"
-                placeholder="johndoe@gmail.com"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                containerStyle={styles.marginBottom}
-                onChange={handleChange('email')}
-                value={values.email}
-                errorMsg={errors.email}
-              />
-              <AuthInputField
-                label="Password"
-                placeholder="******"
-                autoCapitalize="none"
-                secureTextEntry
-                onChange={handleChange('password')}
-                value={values.password}
-                errorMsg={errors.password}
-              />
-              <Button title="Sign Up" onPress={submitForm} />
-            </View>
-          );
-        }}
-      </Formik>
+        <View style={styles.formContainer}>
+          <AuthInputField
+            label="Name"
+            placeholder="John Doe"
+            containerStyle={styles.marginBottom}
+            name="name"
+          />
+          <AuthInputField
+            label="Email"
+            placeholder="johndoe@gmail.com"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            containerStyle={styles.marginBottom}
+            name="email"
+          />
+          <AuthInputField
+            label="Password"
+            placeholder="******"
+            autoCapitalize="none"
+            secureTextEntry
+            name="password"
+          />
+          <SubmitBtn title="Sign Up" />
+        </View>
+      </Form>
     </SafeAreaView>
   );
 };

@@ -1,6 +1,7 @@
+import AppButton from '@ui/AppButton';
 import {useFormikContext} from 'formik';
 import React, {FC} from 'react';
-import {Button, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 interface Props {
   title: string;
@@ -9,7 +10,7 @@ interface Props {
 const SubmitBtn: FC<Props> = props => {
   const {submitForm} = useFormikContext();
   const {title} = props;
-  return <Button title={title} onPress={submitForm} />;
+  return <AppButton title={title} onPress={submitForm} />;
 };
 
 const styles = StyleSheet.create({

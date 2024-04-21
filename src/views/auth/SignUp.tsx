@@ -5,6 +5,7 @@ import {View, StyleSheet, SafeAreaView, Button} from 'react-native';
 import Form from 'src/form';
 import * as yup from 'yup';
 import SubmitBtn from 'src/form/SubmitBtn';
+import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 
 interface Props {}
 
@@ -38,6 +39,10 @@ const signupSchema = yup.object({
 });
 
 const SignUp: FC<Props> = props => {
+  const [secureEntry, setSecureEntry] = useState(false);
+
+  const togglePasswordVisibility = () => setSecureEntry(!secureEntry);
+
   return (
     <SafeAreaView style={styles.container}>
       <Form
@@ -63,9 +68,11 @@ const SignUp: FC<Props> = props => {
             label="Password"
             placeholder="******"
             autoCapitalize="none"
-            secureTextEntry
+            secureTextEntry={secureEntry}
             name="password"
             containerStyle={styles.marginBottom}
+            rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
+            onRightIconPress={togglePasswordVisibility}
           />
           <SubmitBtn title="Sign Up" />
         </View>

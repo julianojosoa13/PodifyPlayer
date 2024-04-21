@@ -1,7 +1,7 @@
 import AppInput from '@ui/AppInput';
 import colors from '@utils/colors';
 import {useFormikContext} from 'formik';
-import React, {FC, useEffect} from 'react';
+import React, {FC, ReactNode, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   TextInputProps,
   StyleProp,
   ViewStyle,
+  Pressable,
 } from 'react-native';
 import Animated, {
   interpolate,
@@ -27,6 +28,8 @@ interface Props {
   autoCapitalize?: TextInputProps['autoCapitalize'];
   secureTextEntry?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
+  rightIcon?: ReactNode;
+  onRightIconPress?(): void;
 }
 
 const AuthInputField: FC<Props> = props => {
@@ -45,6 +48,8 @@ const AuthInputField: FC<Props> = props => {
     autoCapitalize,
     secureTextEntry,
     containerStyle,
+    rightIcon,
+    onRightIconPress,
   } = props;
 
   const errorMsg = touched && errors[name] ? errors[name] : '';
@@ -81,15 +86,22 @@ const AuthInputField: FC<Props> = props => {
         <Text style={styles.label}>{label}</Text>
         <Text style={styles.errorMsg}>{errorMsg}</Text>
       </View>
-      <AppInput
-        placeholder={placeholder}
-        keyboardType={keyboardType}
-        autoCapitalize={autoCapitalize}
-        secureTextEntry={secureTextEntry}
-        onChangeText={handleChange(name)}
-        value={values[name]}
-        onBlur={handleBlur(name)}
-      />
+      <View>
+        <AppInput
+          placeholder={placeholder}
+          keyboardType={keyboardType}
+          autoCapitalize={autoCapitalize}
+          secureTextEntry={secureTextEntry}
+          onChangeText={handleChange(name)}
+          value={values[name]}
+          onBlur={handleBlur(name)}
+        />
+        {rightIcon ? (
+          <Pressable onPress={onRightIconPress} style={styles.rightIcon}>
+            {rightIcon}
+          </Pressable>
+        ) : null}
+      </View>
     </Animated.View>
   );
 };
@@ -101,6 +113,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 5,
+  },
+  rightIcon: {
+    width: 45,
+    height: 45,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

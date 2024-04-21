@@ -1,7 +1,7 @@
 import AppInput from '@ui/AppInput';
 import colors from '@utils/colors';
 import {useFormikContext} from 'formik';
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,6 +10,14 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 
 interface Props {
   name: string;
@@ -22,9 +30,12 @@ interface Props {
 }
 
 const AuthInputField: FC<Props> = props => {
-  const {handleChange, errors, values, handleBlur, touched} = useFormikContext<{
-    [key: string]: string;
-  }>();
+  const inputTransformValue = useSharedValue(0);
+
+  const {handleChange, errors, values, handleBlur, touched, handleSubmit} =
+    useFormikContext<{
+      [key: string]: string;
+    }>();
 
   const {
     name,
@@ -38,8 +49,34 @@ const AuthInputField: FC<Props> = props => {
 
   const errorMsg = touched && errors[name] ? errors[name] : '';
 
+  const shakeUI = () => {
+    inputTransformValue.value = withSequence(
+      withTiming(-10, {duration: 50}),
+      withSpring(0, {
+        damping: 8,
+        mass: 0.5,
+        stiffness: 1000,
+        restDisplacementThreshold: 0.1,
+      }),
+    );
+  };
+
+  const inputStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: inputTransformValue.value,
+        },
+      ],
+    };
+  });
+
+  useEffect(() => {
+    if (errorMsg) shakeUI();
+  }, [errorMsg]);
+
   return (
-    <View style={[styles.container, containerStyle]}>
+    <Animated.View style={[containerStyle, inputStyle]}>
       <View style={styles.labelContainer}>
         <Text style={styles.label}>{label}</Text>
         <Text style={styles.errorMsg}>{errorMsg}</Text>
@@ -53,12 +90,11 @@ const AuthInputField: FC<Props> = props => {
         value={values[name]}
         onBlur={handleBlur(name)}
       />
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
   label: {color: colors.CONTRAST},
   errorMsg: {color: colors.ERROR},
   labelContainer: {

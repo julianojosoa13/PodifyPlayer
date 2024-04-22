@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import SubmitBtn from 'src/form/SubmitBtn';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
+import CircleUI from '@ui/CircleUI';
 
 interface Props {}
 
@@ -46,6 +47,10 @@ const SignUp: FC<Props> = props => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <CircleUI size={200} position="top-left" />
+      <CircleUI size={100} position="top-right" />
+      <CircleUI size={100} position="bottom-left" />
+      <CircleUI size={200} position="bottom-right" />
       <Form
         initialValues={initialValues}
         onSubmit={values => console.log(values)}

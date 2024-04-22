@@ -1,13 +1,14 @@
 import AuthInputField from 'src/form/AuthInputField';
 import colors from '@utils/colors';
 import React, {FC, useState} from 'react';
-import {View, StyleSheet, SafeAreaView, Button} from 'react-native';
+import {View, StyleSheet, SafeAreaView, Button, Image} from 'react-native';
 import Form from 'src/form';
 import * as yup from 'yup';
 import SubmitBtn from 'src/form/SubmitBtn';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
 import CircleUI from '@ui/CircleUI';
+import {Text} from 'react-native';
 
 interface Props {}
 
@@ -51,6 +52,21 @@ const SignUp: FC<Props> = props => {
       <CircleUI size={100} position="top-right" />
       <CircleUI size={100} position="bottom-left" />
       <CircleUI size={200} position="bottom-right" />
+      <View style={{width: '100%', marginBottom: 20}}>
+        <Image source={require('src/assets/logo.png')} />
+        <Text
+          style={{
+            color: colors.SECONDARY,
+            fontSize: 25,
+            fontWeight: 'bold',
+            paddingVertical: 5,
+          }}>
+          Welcome !
+        </Text>
+        <Text style={{fontSize: 16, color: colors.CONTRAST}}>
+          Let's get started by creating your account
+        </Text>
+      </View>
       <Form
         initialValues={initialValues}
         onSubmit={values => console.log(values)}

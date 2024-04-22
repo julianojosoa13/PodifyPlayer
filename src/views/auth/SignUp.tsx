@@ -6,6 +6,7 @@ import Form from 'src/form';
 import * as yup from 'yup';
 import SubmitBtn from 'src/form/SubmitBtn';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
+import AppLink from '@ui/AppLink';
 
 interface Props {}
 
@@ -75,6 +76,11 @@ const SignUp: FC<Props> = props => {
             onRightIconPress={togglePasswordVisibility}
           />
           <SubmitBtn title="Sign Up" />
+
+          <View style={styles.linkContainer}>
+            <AppLink title="I Lost My Password" />
+            <AppLink title="Sign In" />
+          </View>
         </View>
       </Form>
     </SafeAreaView>
@@ -93,6 +99,12 @@ const styles = StyleSheet.create({
   },
   marginBottom: {
     marginBottom: 20,
+  },
+  linkContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 20,
   },
 });
 

@@ -14,8 +14,6 @@ const Verification: FC<Props> = props => {
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
   const inputRef = useRef<TextInput>(null);
 
-  inputRef.current?.focus();
-
   const handleChange = (value: string, index: number) => {
     const newOtp = [...otp];
     if (value === 'Backspace') {

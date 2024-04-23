@@ -1,9 +1,9 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
-import LostPassword from '@views/auth/LostPassword';
+import Verification from '@views/auth/Verification';
 
 const App = () => {
-  return <LostPassword />;
+  return <Verification />;
 };
 
 export default App;

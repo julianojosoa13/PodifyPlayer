@@ -1,14 +1,15 @@
-import AuthInputField from 'src/form/AuthInputField';
+import AuthInputField from '@components/form/AuthInputField';
 import colors from '@utils/colors';
 import React, {FC, useState} from 'react';
 import {View, StyleSheet, SafeAreaView, Button, Image} from 'react-native';
-import Form from 'src/form';
+import Form from '@components/form';
 import * as yup from 'yup';
-import SubmitBtn from 'src/form/SubmitBtn';
+import SubmitBtn from '@components/form/SubmitBtn';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
 import CircleUI from '@ui/CircleUI';
 import {Text} from 'react-native';
+import AuthFormContainer from '@components/AuthFormContainer';
 
 interface Props {}
 
@@ -47,30 +48,13 @@ const SignUp: FC<Props> = props => {
   const togglePasswordVisibility = () => setSecureEntry(!secureEntry);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <CircleUI size={200} position="top-left" />
-      <CircleUI size={100} position="top-right" />
-      <CircleUI size={100} position="bottom-left" />
-      <CircleUI size={200} position="bottom-right" />
-      <View style={{width: '100%', marginBottom: 20}}>
-        <Image source={require('src/assets/logo.png')} />
-        <Text
-          style={{
-            color: colors.SECONDARY,
-            fontSize: 25,
-            fontWeight: 'bold',
-            paddingVertical: 5,
-          }}>
-          Welcome !
-        </Text>
-        <Text style={{fontSize: 16, color: colors.CONTRAST}}>
-          Let's get started by creating your account
-        </Text>
-      </View>
-      <Form
-        initialValues={initialValues}
-        onSubmit={values => console.log(values)}
-        validationSchema={signupSchema}>
+    <Form
+      initialValues={initialValues}
+      onSubmit={values => console.log(values)}
+      validationSchema={signupSchema}>
+      <AuthFormContainer
+        heading=" Welcome !"
+        subHeading="Let's get started by creating your account">
         <View style={styles.formContainer}>
           <AuthInputField
             label="Name"
@@ -103,18 +87,11 @@ const SignUp: FC<Props> = props => {
             <AppLink title="Sign In" />
           </View>
         </View>
-      </Form>
-    </SafeAreaView>
+      </AuthFormContainer>
+    </Form>
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.PRIMARY,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 15,
-  },
   formContainer: {
     width: '100%',
   },

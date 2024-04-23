@@ -1,5 +1,5 @@
-import React, {FC, useRef} from 'react';
-import {View, StyleSheet, TextInput} from 'react-native';
+import React, {FC, useEffect, useRef, useState} from 'react';
+import {View, StyleSheet, TextInput, Keyboard} from 'react-native';
 import AppLink from '@ui/AppLink';
 import AuthFormContainer from '@components/AuthFormContainer';
 import OTPField from '@ui/OTPField';
@@ -10,9 +10,43 @@ interface Props {}
 const otpFields = new Array(6).fill('');
 
 const Verification: FC<Props> = props => {
+  const [otp, setOtp] = useState([...otpFields]);
+  const [activeOtpIndex, setActiveOtpIndex] = useState(0);
   const inputRef = useRef<TextInput>(null);
 
   inputRef.current?.focus();
+
+  const handleChange = (value: string, index: number) => {
+    const newOtp = [...otp];
+    if (value === 'Backspace') {
+      if (!newOtp[index]) setActiveOtpIndex(index - 1);
+      newOtp[index] = '';
+    } else {
+      setActiveOtpIndex(index + 1);
+      newOtp[index] = value;
+    }
+    setOtp([...newOtp]);
+  };
+
+  const handlePaste = (value: string, index: number) => {
+    if (value.length === 6) {
+      Keyboard.dismiss();
+      const newOtp = value.split('');
+      setOtp([...newOtp]);
+    } else {
+      let newOtp = otp;
+      newOtp[index] = value[0];
+      setOtp([...newOtp]);
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log(otp);
+  };
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [activeOtpIndex]);
 
   return (
     <AuthFormContainer
@@ -21,11 +55,23 @@ const Verification: FC<Props> = props => {
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
           {otpFields?.map((_, index) => {
-            return <OTPField key={index} placeholder="*" ref={inputRef} />;
+            return (
+              <OTPField
+                key={index}
+                placeholder="*"
+                ref={activeOtpIndex === index ? inputRef : null}
+                onKeyPress={({nativeEvent}) => {
+                  handleChange(nativeEvent.key, index);
+                }}
+                keyboardType="numeric"
+                onChangeText={text => handlePaste(text, index)}
+                value={otp[index] || ''}
+              />
+            );
           })}
         </View>
 
-        <AppButton title="Submit" />
+        <AppButton title="Submit" onPress={handleSubmit} />
 
         <View style={styles.linkContainer}>
           <AppLink title="Resend OTP" />

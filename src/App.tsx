@@ -1,10 +1,9 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
-import SignUp from '@views/auth/SignUp';
-import SignIn from '@views/auth/SignIn';
+import LostPassword from '@views/auth/LostPassword';
 
 const App = () => {
-  return <SignIn />;
+  return <LostPassword />;
 };
 
 export default App;

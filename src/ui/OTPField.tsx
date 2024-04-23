@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     borderColor: colors.SECONDARY,
+    verticalAlign: 'middle',
     borderWidth: 2,
     textAlign: 'center',
     color: colors.CONTRAST,
     fontSize: 18,
     fontWeight: 'bold',
-    lineHeight: 0,
   },
 });
 

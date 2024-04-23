@@ -30,18 +30,18 @@ const Verification: FC<Props> = props => {
 
   const handlePaste = (value: string, index: number) => {
     if (value.length === 6) {
-      Keyboard.dismiss();
       const newOtp = value.split('');
       setOtp([...newOtp]);
-    } else {
-      let newOtp = otp;
-      newOtp[index] = value[0];
-      setOtp([...newOtp]);
+      Keyboard.dismiss();
     }
   };
 
   const handleSubmit = () => {
     console.log(otp);
+  };
+
+  const handlePress = (index: number) => {
+    setActiveOtpIndex(index);
   };
 
   useEffect(() => {
@@ -66,6 +66,7 @@ const Verification: FC<Props> = props => {
                 keyboardType="numeric"
                 onChangeText={text => handlePaste(text, index)}
                 value={otp[index] || ''}
+                onPressIn={() => handlePress(index)}
               />
             );
           })}

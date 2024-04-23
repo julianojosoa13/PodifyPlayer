@@ -4,8 +4,8 @@ import React, {FC, ReactNode} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
 interface Props {
-  heading: string;
-  subHeading: string;
+  heading?: string;
+  subHeading?: string;
   children: ReactNode;
 }
 

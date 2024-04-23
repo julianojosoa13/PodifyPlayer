@@ -11,17 +11,11 @@ import AuthFormContainer from '@components/AuthFormContainer';
 interface Props {}
 
 const initialValues = {
-  name: '',
   email: '',
   password: '',
 };
 
 const signupSchema = yup.object({
-  name: yup
-    .string()
-    .trim('Name is missing')
-    .min(3, 'Invalid Name')
-    .required('Name is required'),
   email: yup
     .string()
     .trim('Email is missing')
@@ -31,15 +25,10 @@ const signupSchema = yup.object({
     .string()
     .trim('password is missing')
     .min(8, 'Password is too short')
-    .matches(/^\S*$/, 'Invalid character: white spaces')
-    .matches(
-      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/,
-      'Password is too simple',
-    )
     .required('Password is required'),
 });
 
-const SignUp: FC<Props> = props => {
+const SignIn: FC<Props> = props => {
   const [secureEntry, setSecureEntry] = useState(false);
 
   const togglePasswordVisibility = () => setSecureEntry(!secureEntry);
@@ -49,16 +38,8 @@ const SignUp: FC<Props> = props => {
       initialValues={initialValues}
       onSubmit={values => console.log(values)}
       validationSchema={signupSchema}>
-      <AuthFormContainer
-        heading=" Welcome !"
-        subHeading="Let's get started by creating your account">
+      <AuthFormContainer heading=" Welcome Back!">
         <View style={styles.formContainer}>
-          <AuthInputField
-            label="Name"
-            placeholder="John Doe"
-            containerStyle={styles.marginBottom}
-            name="name"
-          />
           <AuthInputField
             label="Email"
             placeholder="johndoe@gmail.com"
@@ -77,11 +58,11 @@ const SignUp: FC<Props> = props => {
             rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
             onRightIconPress={togglePasswordVisibility}
           />
-          <SubmitBtn title="Sign Up" />
+          <SubmitBtn title="Sign In" />
 
           <View style={styles.linkContainer}>
             <AppLink title="I Lost My Password" />
-            <AppLink title="Sign In" />
+            <AppLink title="Sign Up" />
           </View>
         </View>
       </AuthFormContainer>
@@ -103,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default SignIn;

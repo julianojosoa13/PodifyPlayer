@@ -1,12 +1,12 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
-import Verification from '@views/auth/Verification';
 import {NavigationContainer} from '@react-navigation/native';
+import AuthNavigator from './navigation/auth/AuthNavigator';
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Verification />
+      <AuthNavigator />
     </NavigationContainer>
   );
 };

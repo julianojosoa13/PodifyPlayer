@@ -7,6 +7,8 @@ import SubmitBtn from '@components/form/SubmitBtn';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
 import AuthFormContainer from '@components/AuthFormContainer';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AuthStackParamList} from 'src/@types/navigation';
 
 interface Props {}
 
@@ -40,6 +42,8 @@ const signupSchema = yup.object({
 });
 
 const SignUp: FC<Props> = props => {
+  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+
   const [secureEntry, setSecureEntry] = useState(false);
 
   const togglePasswordVisibility = () => setSecureEntry(!secureEntry);
@@ -80,8 +84,14 @@ const SignUp: FC<Props> = props => {
           <SubmitBtn title="Sign Up" />
 
           <View style={styles.linkContainer}>
-            <AppLink title="I Lost My Password" />
-            <AppLink title="Sign In" />
+            <AppLink
+              title="I Lost My Password"
+              onPress={() => navigation.navigate('LostPassword')}
+            />
+            <AppLink
+              title="Sign In"
+              onPress={() => navigation.navigate('SignIn')}
+            />
           </View>
         </View>
       </AuthFormContainer>

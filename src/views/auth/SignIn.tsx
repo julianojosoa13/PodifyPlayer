@@ -15,7 +15,7 @@ const initialValues = {
   password: '',
 };
 
-const signupSchema = yup.object({
+const signInSchema = yup.object({
   email: yup
     .string()
     .trim('Email is missing')
@@ -37,7 +37,7 @@ const SignIn: FC<Props> = props => {
     <Form
       initialValues={initialValues}
       onSubmit={values => console.log(values)}
-      validationSchema={signupSchema}>
+      validationSchema={signInSchema}>
       <AuthFormContainer heading=" Welcome Back!">
         <View style={styles.formContainer}>
           <AuthInputField

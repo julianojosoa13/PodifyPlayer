@@ -5,13 +5,9 @@ import SignIn from '@views/auth/SignIn';
 import SignUp from '@views/auth/SignUp';
 import LostPassword from '@views/auth/LostPassword';
 import Verification from '@views/auth/Verification';
+import { AuthStackParamList } from 'src/@types/navigation';
 
-const Stack = createNativeStackNavigator<{
-  SignIn: undefined;
-  SignUp: undefined;
-  LostPassword: undefined;
-  Verification: undefined;
-}>();
+const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 interface Props {}
 

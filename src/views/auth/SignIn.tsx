@@ -36,10 +36,12 @@ const SignIn: FC<Props> = props => {
 
   const togglePasswordVisibility = () => setSecureEntry(!secureEntry);
 
+  const handleSubmit = () => {};
+
   return (
     <Form
       initialValues={initialValues}
-      onSubmit={values => console.log(values)}
+      onSubmit={handleSubmit}
       validationSchema={signInSchema}>
       <AuthFormContainer heading=" Welcome Back!">
         <View style={styles.formContainer}>

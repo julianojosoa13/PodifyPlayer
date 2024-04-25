@@ -4,8 +4,10 @@ import AppLink from '@ui/AppLink';
 import AuthFormContainer from '@components/AuthFormContainer';
 import OTPField from '@ui/OTPField';
 import AppButton from '@ui/AppButton';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from 'src/@types/navigation';
 
-interface Props {}
+type Props = NativeStackScreenProps<AuthStackParamList, 'Verification'>;
 
 const otpFields = new Array(6).fill('');
 
@@ -13,6 +15,8 @@ const Verification: FC<Props> = props => {
   const [otp, setOtp] = useState([...otpFields]);
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
   const inputRef = useRef<TextInput>(null);
+
+  console.log(props.route.params.userInfo);
 
   const handleChange = (value: string, index: number) => {
     const newOtp = [...otp];

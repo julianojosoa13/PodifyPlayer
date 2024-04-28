@@ -17,6 +17,7 @@ const Verification: FC<Props> = ({route}) => {
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   const [otp, setOtp] = useState([...otpFields]);
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
   const {userInfo} = route.params;
@@ -47,7 +48,7 @@ const Verification: FC<Props> = ({route}) => {
 
   const handleSubmit = async () => {
     if (!isValidOtp) return;
-
+    setSubmitting(true);
     try {
       const {data} = await client.post('/auth/verify-email', {
         userId: userInfo.id,
@@ -58,10 +59,19 @@ const Verification: FC<Props> = ({route}) => {
     } catch (error) {
       console.log('Error inside Verification ', error);
     }
+    setSubmitting(true);
   };
 
   const handlePress = (index: number) => {
     setActiveOtpIndex(index);
+  };
+
+  const resendOTP = async () => {
+    try {
+      await client.post('/auth/re-verify-email', {userIId: userInfo.id});
+    } catch (error) {
+      console.log('Requesting for new OTP ', error);
+    }
   };
 
   useEffect(() => {
@@ -92,7 +102,7 @@ const Verification: FC<Props> = ({route}) => {
           })}
         </View>
 
-        <AppButton title="Submit" onPress={handleSubmit} />
+        <AppButton title="Submit" onPress={handleSubmit} busy={submitting} />
 
         <View style={styles.linkContainer}>
           <AppLink title="Resend OTP" />

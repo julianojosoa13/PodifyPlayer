@@ -9,8 +9,15 @@ import AppLink from '@ui/AppLink';
 import AuthFormContainer from '@components/AuthFormContainer';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AuthStackParamList} from 'src/@types/navigation';
+import {FormikHelpers} from 'formik';
+import client from 'src/api/client';
 
 interface Props {}
+
+interface SignInUserInfo {
+  email: string;
+  password: string;
+}
 
 const initialValues = {
   email: '',
@@ -26,17 +33,29 @@ const signInSchema = yup.object({
   password: yup
     .string()
     .trim('password is missing')
-    .min(8, 'Password is too short')
     .required('Password is required'),
 });
 
 const SignIn: FC<Props> = props => {
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
-  const [secureEntry, setSecureEntry] = useState(false);
+  const [secureEntry, setSecureEntry] = useState(true);
 
   const togglePasswordVisibility = () => setSecureEntry(!secureEntry);
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (
+    values: SignInUserInfo,
+    actions: FormikHelpers<SignInUserInfo>,
+  ) => {
+    try {
+      const {data} = await client.post('/auth/sign-in', {
+        ...values,
+      });
+
+      console.log(data);
+    } catch (error) {
+      console.log('Signin error', error);
+    }
+  };
 
   return (
     <Form

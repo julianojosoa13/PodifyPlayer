@@ -62,7 +62,7 @@ const Verification: FC<Props> = ({route}) => {
     } catch (error) {
       console.log('Error inside Verification ', error);
     }
-    setSubmitting(true);
+    setSubmitting(false);
   };
 
   const handlePress = (index: number) => {
@@ -73,9 +73,9 @@ const Verification: FC<Props> = ({route}) => {
     setCountDown(60);
     setCanSendNewOtpRequest(false);
     try {
-      await client.post('/auth/re-verify-email', {userIId: userInfo.id});
-    } catch (error) {
-      console.log('Requesting for new OTP ', error);
+      await client.post('/auth/re-verify-email', {userId: userInfo.id});
+    } catch (err) {
+      console.log('Requesting for new OTP ', err);
     }
   };
 

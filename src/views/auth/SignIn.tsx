@@ -11,6 +11,8 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AuthStackParamList} from 'src/@types/navigation';
 import {FormikHelpers} from 'formik';
 import client from 'src/api/client';
+import {updateLoggedIn, updateProfile} from 'src/store/auth';
+import {useDispatch} from 'react-redux';
 
 interface Props {}
 
@@ -38,6 +40,7 @@ const signInSchema = yup.object({
 
 const SignIn: FC<Props> = props => {
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  const dispatch = useDispatch();
   const [secureEntry, setSecureEntry] = useState(true);
 
   const togglePasswordVisibility = () => setSecureEntry(!secureEntry);
@@ -52,7 +55,10 @@ const SignIn: FC<Props> = props => {
         ...values,
       });
 
-      console.log(data);
+      if (data) {
+        dispatch(updateProfile(data.profile));
+        dispatch(updateLoggedIn(true));
+      }
     } catch (error) {
       console.log('Signin error', error);
     }

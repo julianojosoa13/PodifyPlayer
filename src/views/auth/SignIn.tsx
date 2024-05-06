@@ -13,6 +13,7 @@ import {FormikHelpers} from 'formik';
 import client from 'src/api/client';
 import {updateLoggedIn, updateProfile} from 'src/store/auth';
 import {useDispatch} from 'react-redux';
+import {Keys, saveToAsyncStorage} from '@utils/asyncStorage';
 
 interface Props {}
 
@@ -56,6 +57,7 @@ const SignIn: FC<Props> = props => {
       });
 
       if (data) {
+        saveToAsyncStorage(Keys.AUTH_TOKEN, data.token);
         dispatch(updateProfile(data.profile));
         dispatch(updateLoggedIn(true));
       }

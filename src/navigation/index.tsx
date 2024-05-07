@@ -35,12 +35,14 @@ const RootNavigator: FC<Props> = props => {
         }
       } catch (error) {
         console.log('Auth error :>> ', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchAuthInfo();
   }, []);
+
   if (loading) return null;
 
   return (

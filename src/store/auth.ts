@@ -38,8 +38,10 @@ const slice = createSlice({
 export const {updateProfile, updateLoggedIn} = slice.actions;
 
 export const getAuthState = createSelector(
-  (state: RootState) => state,
-  authState => authState,
+  (state: RootState) => state.auth,
+  authState => {
+    return {loggedIn: authState.loggedIn, profile: authState.profile};
+  },
 );
 
 export default slice.reducer;

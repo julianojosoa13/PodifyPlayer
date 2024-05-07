@@ -5,11 +5,14 @@ import AuthNavigator from './navigation/AuthNavigator';
 import {Provider} from 'react-redux';
 import store from './store';
 import RootNavigator from './navigation';
+import AppContainer from '@components/AppContainer';
 
 const App = () => {
   return (
     <Provider store={store}>
-      <RootNavigator />
+      <AppContainer>
+        <RootNavigator />
+      </AppContainer>
     </Provider>
   );
 };

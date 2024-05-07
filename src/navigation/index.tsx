@@ -1,7 +1,6 @@
-import {NavigationContainer} from '@react-navigation/native';
-import React, {FC, useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
-import AuthNavigator from './AuthNavigator';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import React, {FC, useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getAuthState,
@@ -9,9 +8,22 @@ import {
   updateLoggedIn,
   updateProfile,
 } from 'src/store/auth';
-import TabNavigator from './TabNavigator';
 import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import client from 'src/api/client';
+import Loader from '@ui/Loader';
+import colors from '@utils/colors';
+
+import AuthNavigator from './AuthNavigator';
+import TabNavigator from './TabNavigator';
+
+const AppTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: colors.PRIMARY,
+    primary: colors.CONTRAST,
+  },
+};
 
 interface Props {}
 
@@ -50,10 +62,22 @@ const RootNavigator: FC<Props> = props => {
     fetchAuthInfo();
   }, []);
 
-  if (busy) return null;
+  if (busy)
+    return (
+      <View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: colors.OVERLAY,
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1,
+        }}>
+        <Loader />
+      </View>
+    );
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={AppTheme}>
       {loggedIn ? <TabNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );

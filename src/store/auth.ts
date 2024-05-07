@@ -20,7 +20,7 @@ interface AuthState {
 const initialState: AuthState = {
   profile: null,
   loggedIn: false,
-  busy: false,
+  busy: true,
 };
 
 const slice = createSlice({

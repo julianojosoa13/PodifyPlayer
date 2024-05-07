@@ -27,7 +27,7 @@ const Upload: FC<Props> = props => {
               color={colors.SECONDARY}
             />
           }
-          btnTitle="Select Poster"
+          btnTitle="Smodalelect Poster"
         />
         <FileSelector
           icon={

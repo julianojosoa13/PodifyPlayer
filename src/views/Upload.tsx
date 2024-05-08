@@ -1,12 +1,14 @@
 import CategorySelector from '@components/CategorySelector';
 import FileSelector from '@components/FileSelector';
 import AppButton from '@ui/AppButton';
+import {categories} from '@utils/categories';
 import colors from '@utils/colors';
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {
-  SafeAreaView,
+  Pressable,
   ScrollView,
   StyleSheet,
+  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -16,6 +18,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 interface Props {}
 
 const Upload: FC<Props> = props => {
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [audioInfo, setAudioInfo] = useState({
+    category: '',
+  });
   return (
     <ScrollView style={styles.container}>
       <View style={styles.fileSelectorContainer}>
@@ -47,6 +53,14 @@ const Upload: FC<Props> = props => {
           style={styles.input}
           placeholderTextColor={colors.INACTIVE_CONTRAST}
         />
+
+        <Pressable
+          style={styles.categorySelector}
+          onPress={() => setShowCategoryModal(true)}>
+          <Text style={styles.categorySelectorTitle}>Category</Text>
+          <Text style={styles.selectedCategory}>{audioInfo.category}</Text>
+        </Pressable>
+
         <TextInput
           placeholder="About"
           style={styles.input}
@@ -56,8 +70,20 @@ const Upload: FC<Props> = props => {
         />
       </View>
 
-      <CategorySelector title="Category" visible />
-
+      <CategorySelector
+        title="Category"
+        visible={showCategoryModal}
+        data={categories}
+        renderItem={item => {
+          return <Text style={styles.category}>{item}</Text>;
+        }}
+        onSelect={item => {
+          setAudioInfo({category: item});
+          setShowCategoryModal(false);
+        }}
+        onRequestClose={() => setShowCategoryModal(false)}
+      />
+      <View style={{marginBottom: 20}} />
       <AppButton title="Upload" borderRadius={7} />
     </ScrollView>
   );
@@ -80,8 +106,24 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     color: colors.CONTRAST,
-    marginBottom: 20,
     textAlignVertical: 'top',
+  },
+  category: {
+    padding: 10,
+    color: colors.PRIMARY,
+  },
+  categorySelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  categorySelectorTitle: {
+    color: colors.CONTRAST,
+  },
+  selectedCategory: {
+    color: colors.SECONDARY,
+    marginLeft: 5,
+    fontStyle: 'italic',
   },
 });
 

@@ -1,6 +1,7 @@
 import CategorySelector from '@components/CategorySelector';
 import FileSelector from '@components/FileSelector';
 import AppButton from '@ui/AppButton';
+import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import {categories} from '@utils/categories';
 import colors from '@utils/colors';
 import React, {FC, useState} from 'react';
@@ -15,6 +16,7 @@ import {
 import {DocumentPickerResponse, types} from 'react-native-document-picker';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import client from 'src/api/client';
 
 import * as yup from 'yup';
 
@@ -58,12 +60,42 @@ const Upload: FC<Props> = props => {
 
   const handleUpload = async () => {
     try {
-      const data = await audioInfoSchem.validateSync(audioInfo);
+      const finalData = await audioInfoSchem.validateSync(audioInfo);
+
+      const formData = new FormData();
+
+      formData.append('title', finalData.title);
+      formData.append('about', finalData.about);
+      formData.append('category', finalData.category);
+      formData.append('file', {
+        name: finalData.file.name,
+        type: finalData.file.type,
+        size: finalData.file.size,
+        uri: finalData.file.uri,
+      });
+      if (finalData.poster.uri) {
+        formData.append('poster', {
+          name: finalData.poster.name,
+          type: finalData.poster.type,
+          size: finalData.poster.size,
+          uri: finalData.poster.uri,
+        });
+      }
+
+      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+
+      const {data} = await client.post('audio/create', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       console.log(data);
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         console.log(error.message);
-      }
+      } else console.log(error.response.data);
     }
   };
 

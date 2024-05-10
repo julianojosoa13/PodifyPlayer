@@ -4,6 +4,7 @@ import AppButton from '@ui/AppButton';
 import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import {categories} from '@utils/categories';
 import colors from '@utils/colors';
+import {AxiosError} from 'axios';
 import React, {FC, useState} from 'react';
 import {
   Pressable,
@@ -95,7 +96,8 @@ const Upload: FC<Props> = props => {
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         console.log(error.message);
-      } else console.log(error.response.data);
+      } else if (error instanceof AxiosError && error?.response)
+        console.log(error?.response.data);
     }
   };
 

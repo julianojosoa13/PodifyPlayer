@@ -5,6 +5,7 @@ import Progress from '@ui/Progress';
 import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import {categories} from '@utils/categories';
 import colors from '@utils/colors';
+import {mapRange} from '@utils/math';
 import {AxiosError} from 'axios';
 import React, {FC, useState} from 'react';
 import {
@@ -59,9 +60,12 @@ interface Props {}
 const Upload: FC<Props> = props => {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [audioInfo, setAudioInfo] = useState({...defaultForm});
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [busy, setBusy] = useState(false);
 
   const handleUpload = async () => {
     try {
+      setBusy(true);
       const finalData = await audioInfoSchem.validateSync(audioInfo);
 
       const formData = new FormData();
@@ -91,6 +95,19 @@ const Upload: FC<Props> = props => {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
+        onUploadProgress(progressEvent) {
+          const uploaded = mapRange({
+            inputMin: 0,
+            inputMax: progressEvent.total || 0,
+            outputMin: 0,
+            outputMax: 100,
+            inputValue: progressEvent.loaded,
+          });
+          if (uploaded >= 100) {
+            setAudioInfo({...defaultForm});
+          }
+          setUploadProgress(Math.floor(uploaded));
+        },
       });
 
       console.log(data);
@@ -99,6 +116,8 @@ const Upload: FC<Props> = props => {
         console.log(error.message);
       } else if (error instanceof AxiosError && error?.response)
         console.log(error?.response.data);
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -172,9 +191,14 @@ const Upload: FC<Props> = props => {
         onRequestClose={() => setShowCategoryModal(false)}
       />
       <View style={{marginVertical: 20}}>
-        <Progress progress={78} />
+        {busy ? <Progress progress={uploadProgress} /> : null}
       </View>
-      <AppButton title="Upload" borderRadius={7} onPress={handleUpload} />
+      <AppButton
+        title="Upload"
+        borderRadius={7}
+        onPress={handleUpload}
+        busy={busy}
+      />
     </ScrollView>
   );
 };

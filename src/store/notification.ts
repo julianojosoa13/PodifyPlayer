@@ -14,7 +14,7 @@ const initialState: Notification = {
 
 const slice = createSlice({
   name: 'notification',
-  initialState: null as Notification | null,
+  initialState,
   reducers: {
     updateNotification(state, {payload}: PayloadAction<Notification | null>) {
       state!.message = payload!.message;

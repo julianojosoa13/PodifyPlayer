@@ -17,6 +17,13 @@ const AppNotification: FC<Props> = props => {
   let backgroundColor = colors.ERROR;
   let textColor = colors.CONTRAST;
 
+  switch (type) {
+    case 'success':
+      backgroundColor = colors.SUCCESS;
+      textColor = colors.PRIMARY;
+      break;
+  }
+
   const height = useSharedValue(0);
 
   const dispatch = useDispatch();
@@ -26,28 +33,23 @@ const AppNotification: FC<Props> = props => {
   });
 
   useEffect(() => {
+    console.log({message, type});
     let timeoutId: NodeJS.Timeout;
     const performAnimation = () => {
       height.value = withTiming(50, {duration: 300});
 
       timeoutId = setTimeout(() => {
         height.value = withTiming(0, {duration: 300});
+        dispatch(updateNotification({message: '', type}));
       }, 3000);
-
-      dispatch(updateNotification({message: '', type: 'error'}));
     };
+
+    if (message) performAnimation();
 
     return () => {
       clearTimeout(timeoutId);
     };
   }, [message]);
-
-  switch (type) {
-    case 'success':
-      backgroundColor = colors.SUCCESS;
-      textColor = colors.PRIMARY;
-      break;
-  }
 
   return (
     <Animated.View style={[styles.container, {backgroundColor}, heightStyle]}>

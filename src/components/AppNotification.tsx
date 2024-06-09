@@ -1,14 +1,70 @@
-import React, {FC} from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import colors from '@utils/colors';
+import React, {FC, useEffect} from 'react';
+import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import {useDispatch, useSelector} from 'react-redux';
+import {getNotificationState} from 'src/store';
+import {updateNotification} from 'src/store/notification';
 
 interface Props {}
 
 const AppNotification: FC<Props> = props => {
-  return <SafeAreaView style={styles.container}></SafeAreaView>;
+  const {message, type} = useSelector(getNotificationState);
+  let backgroundColor = colors.ERROR;
+  let textColor = colors.CONTRAST;
+
+  const height = useSharedValue(0);
+
+  const dispatch = useDispatch();
+
+  const heightStyle = useAnimatedStyle(() => {
+    return {height: height.value};
+  });
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    const performAnimation = () => {
+      height.value = withTiming(50, {duration: 300});
+
+      timeoutId = setTimeout(() => {
+        height.value = withTiming(0, {duration: 300});
+      }, 3000);
+
+      dispatch(updateNotification({message: '', type: 'error'}));
+    };
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [message]);
+
+  switch (type) {
+    case 'success':
+      backgroundColor = colors.SUCCESS;
+      textColor = colors.PRIMARY;
+      break;
+  }
+
+  return (
+    <Animated.View style={[styles.container, {backgroundColor}, heightStyle]}>
+      <Text style={[styles.message, {color: textColor}]}>{message}</Text>
+    </Animated.View>
+  );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    width: '100%',
+    justifyContent: 'center',
+  },
+  message: {
+    fontSize: 18,
+    alignItems: 'center',
+  },
 });
 
 export default AppNotification;

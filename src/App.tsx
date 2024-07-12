@@ -6,8 +6,10 @@ import {Provider} from 'react-redux';
 import store from './store';
 import RootNavigator from './navigation';
 import AppContainer from '@components/AppContainer';
+import {clearAsyncStorage} from '@utils/asyncStorage';
 
 const App = () => {
+  // clearAsyncStorage().then(() => console.log('logged out'));
   return (
     <Provider store={store}>
       <AppContainer>

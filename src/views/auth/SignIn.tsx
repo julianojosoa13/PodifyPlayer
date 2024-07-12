@@ -14,6 +14,8 @@ import client from 'src/api/client';
 import {updateLoggedIn, updateProfile} from 'src/store/auth';
 import {useDispatch} from 'react-redux';
 import {Keys, saveToAsyncStorage} from '@utils/asyncStorage';
+import {updateNotification} from 'src/store/notification';
+import catchAsyncError from 'src/api/catchError';
 
 interface Props {}
 
@@ -62,7 +64,8 @@ const SignIn: FC<Props> = props => {
         dispatch(updateLoggedIn(true));
       }
     } catch (error) {
-      console.log('Signin error', error);
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({type: 'error', message: errorMessage}));
     }
     actions.setSubmitting(false);
   };

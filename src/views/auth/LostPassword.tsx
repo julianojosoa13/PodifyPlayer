@@ -10,6 +10,9 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AuthStackParamList} from 'src/@types/navigation';
 import {FormikHelpers} from 'formik';
 import client from 'src/api/client';
+import catchAsyncError from 'src/api/catchError';
+import {useDispatch} from 'react-redux';
+import {updateNotification} from 'src/store/notification';
 
 interface Props {}
 
@@ -32,6 +35,8 @@ const LostPasswordSchema = yup.object({
 const LostPassword: FC<Props> = props => {
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
 
+  const disptach = useDispatch();
+
   const handleSubmit = async (
     values: initialValue,
     actions: FormikHelpers<initialValue>,
@@ -45,7 +50,8 @@ const LostPassword: FC<Props> = props => {
 
       navigation.navigate('SignIn');
     } catch (error) {
-      console.log('Forget Password error ', error);
+      const errorMessage = catchAsyncError(error);
+      disptach(updateNotification({type: 'error', message: errorMessage}));
     }
 
     actions.setSubmitting(false);

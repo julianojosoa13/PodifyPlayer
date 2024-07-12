@@ -9,6 +9,9 @@ import {AuthStackParamList} from 'src/@types/navigation';
 import client from 'src/api/client';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import colors from '@utils/colors';
+import {useDispatch} from 'react-redux';
+import catchAsyncError from 'src/api/catchError';
+import {updateNotification} from 'src/store/notification';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Verification'>;
 
@@ -22,6 +25,8 @@ const Verification: FC<Props> = ({route}) => {
   const [canSendNewOtpRequest, setCanSendNewOtpRequest] = useState(false);
   const [countDown, setCountDown] = useState(60);
   const inputRef = useRef<TextInput>(null);
+
+  const dispatch = useDispatch();
 
   const {userInfo} = route.params;
 
@@ -60,7 +65,8 @@ const Verification: FC<Props> = ({route}) => {
       // navigate back to sign in
       navigation.navigate('SignIn');
     } catch (error) {
-      console.log('Error inside Verification ', error);
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({type: 'error', message: errorMessage}));
     }
     setSubmitting(false);
   };

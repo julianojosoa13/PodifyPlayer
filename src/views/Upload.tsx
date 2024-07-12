@@ -19,7 +19,10 @@ import {
 import {DocumentPickerResponse, types} from 'react-native-document-picker';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useDispatch} from 'react-redux';
+import catchAsyncError from 'src/api/catchError';
 import client from 'src/api/client';
+import {updateNotification} from 'src/store/notification';
 
 import * as yup from 'yup';
 
@@ -62,6 +65,8 @@ const Upload: FC<Props> = props => {
   const [audioInfo, setAudioInfo] = useState({...defaultForm});
   const [uploadProgress, setUploadProgress] = useState(0);
   const [busy, setBusy] = useState(false);
+
+  const disptach = useDispatch();
 
   const handleUpload = async () => {
     try {
@@ -113,9 +118,12 @@ const Upload: FC<Props> = props => {
       console.log(data);
     } catch (error) {
       if (error instanceof yup.ValidationError) {
-        console.log(error.message);
-      } else if (error instanceof AxiosError && error?.response)
-        console.log(error?.response.data);
+        const errorMessage = catchAsyncError(error);
+        disptach(updateNotification({type: 'error', message: errorMessage}));
+      } else if (error instanceof AxiosError && error?.response) {
+        const errorMessage = catchAsyncError(error);
+        disptach(updateNotification({type: 'error', message: errorMessage}));
+      }
     } finally {
       setBusy(false);
     }
@@ -132,7 +140,7 @@ const Upload: FC<Props> = props => {
               color={colors.SECONDARY}
             />
           }
-          btnTitle="Smodalelect Poster"
+          btnTitle="Select Poster"
           onSelect={poster => setAudioInfo({...audioInfo, poster})}
           options={{type: [types.images]}}
         />

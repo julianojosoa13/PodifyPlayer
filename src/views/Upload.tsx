@@ -117,13 +117,8 @@ const Upload: FC<Props> = props => {
 
       console.log(data);
     } catch (error) {
-      if (error instanceof yup.ValidationError) {
-        const errorMessage = catchAsyncError(error);
-        disptach(updateNotification({type: 'error', message: errorMessage}));
-      } else if (error instanceof AxiosError && error?.response) {
-        const errorMessage = catchAsyncError(error);
-        disptach(updateNotification({type: 'error', message: errorMessage}));
-      }
+      const errorMessage = catchAsyncError(error);
+      disptach(updateNotification({type: 'error', message: errorMessage}));
     } finally {
       setBusy(false);
     }
